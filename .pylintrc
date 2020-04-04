@@ -1,0 +1,47 @@
+[MASTER]
+# A comma-separated list of package or module names from where C extensions may
+# be loaded. Extensions are loading into the active Python interpreter and may
+# run arbitrary code.
+#extension-pkg-whitelist=lxml
+#ignore=tests
+#ignore-patterns=conftest,test_*,.*_test,case
+
+[MESSAGES CONTROL]
+# Disabled messages
+
+disable=invalid-name,     # Constant name doesn't conform to UPPER_CASE naming style
+        fixme,            # We want to allow fixmes
+        bad-continuation, # https://github.com/PyCQA/pylint/issues/289
+        abstract-method,  # All request handlers have this
+        too-many-instance-attributes, # Don't limit the number of instance attributes
+        logging-format-interpolation, # We do not want to use %-style interpolation
+        useless-import-alias,         # For mypy no_implicit_reexport
+        no-self-use,                  # Ok to not refer to self in method
+        too-many-branches,
+        too-many-statements,
+        too-many-locals,
+        R0801,            # similar lines
+        R0903,            # Too few public methods
+        R0913,            # Too many arguments
+
+[FORMAT]
+# Maximum number of characters on a single line.
+max-line-length=100
+
+[BASIC]
+# for pylint_quotes
+string-quote=single-avoid-escape
+
+# Good variable names which should always be accepted, separated by a comma.
+#good-names=i,j,k,e,ex,Run,_
+
+[TYPECHECK]
+# List of class names for which member attributes should not be checked.
+#ignored-classes=scoped_session,PublisherClient,SubscriberClient
+
+# List of module names for which member attributes should not be checked.
+#ignored-modules=flask_sqlalchemy, psycopg2.errors
+
+[REPORTS]
+output-format=parseable
+

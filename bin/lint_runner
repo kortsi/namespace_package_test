@@ -1,0 +1,98 @@
+#!/bin/bash
+
+PATH="$(cd "$(dirname "$0")" >/dev/null 2>&1 && pwd)":$PATH
+
+clear
+
+source variables
+
+ARGS="'$@'"
+if [ "$ARGS" = "''" ]; then
+    echo
+    echo '################################################################'
+    echo '#                                                              #'
+    echo '#               NO FILES SPECIFIED FOR LINTING                 #'
+    echo '#                                                              #'
+    echo '################################################################'
+    echo
+    exit 0
+fi
+
+echo
+echo '######################'
+echo '#       isort        #'
+echo '######################'
+echo
+
+isort --recursive --check-only $@
+ISORT_RETVAL="$?"
+
+echo '######################'
+echo '#       mypy         #'
+echo '######################'
+echo
+
+mypy --config-file="$PROJECT_ROOT_DIR/mypy.ini" $@
+MYPY_RETVAL="$?"
+
+echo
+echo '######################'
+echo '#      flake8        #'
+echo '######################'
+echo
+
+flake8 $@
+FLAKE8_RETVAL="$?"
+
+echo
+echo '######################'
+echo '#      pylint        #'
+echo '######################'
+echo
+
+PYLINTRC="$PROJECT_ROOT_DIR/.pylintrc" pylint -j 4 $@
+PYLINT_RETVAL="$?"
+
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+PLAIN='\033[0m'
+
+if [ ! "$FLAKE8_RETVAL$PYLINT_RETVAL$MYPY_RETVAL$ISORT_RETVAL" = "0000" ]; then
+
+
+    printf "${RED}"
+    echo '################################################################'
+    echo '#                        LINT SUMMARY                          #'
+    echo '#                                                              #'
+
+    if [ ! "$FLAKE8_RETVAL" = "0" ]; then
+        echo '# ! flake8 reported problems                                   #'
+    fi
+
+    if [ ! "$PYLINT_RETVAL" = "0" ]; then
+        echo '# ! pylint reported problems                                   #'
+    fi
+
+    if [ ! "$MYPY_RETVAL" = "0" ]; then
+        echo '# ! mypy reported problems                                     #'
+    fi
+
+    if [ ! "$ISORT_RETVAL" = "0" ]; then
+        echo '# ! isort reported problems                                    #'
+    fi
+
+    echo '#                                                              #'
+    echo '#              Problems were found. Please fix.                #'
+    echo '################################################################'
+    printf "${PLAIN}"
+    exit 1
+fi
+
+printf "${GREEN}"
+echo '################################################################'
+echo '#                        LINT SUMMARY                          #'
+echo '#                                                              #'
+echo '#                                                              #'
+echo '#                         All good!                            #'
+echo '################################################################'
+printf "${PLAIN}"

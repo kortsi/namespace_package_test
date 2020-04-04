@@ -1,0 +1,16 @@
+.env
+.envrc
+.venv
+.vscode
+.idea
+.python-version
+**/__pycache__
+**/.mypy_cache
+**/.pytest_cache
+**/.coverage*
+**/coverage.xml
+**/coverage_html
+*.log
+
+
+

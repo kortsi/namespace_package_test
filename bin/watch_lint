@@ -1,0 +1,28 @@
+#!/bin/bash
+
+PATH="$(cd "$(dirname "$0")" >/dev/null 2>&1 && pwd)":$PATH
+
+source variables
+
+# Add drop and sleep so that lint is ran only once and to
+# allow some extra time for all files to be saved
+# Also use nice and ionice if awailable
+
+if which ionice >/dev/null; then
+    cmd="clear; sleep 0.5; nice -19 ionice -c 3 lint"
+else
+    cmd="clear; sleep 0.5; nice -19 lint"
+fi
+
+bash -c "$cmd"
+
+watchmedo \
+    shell-command \
+    $PROJECT_ROOT_DIR \
+    --patterns "*.py;*.ini;.flake8;.pylintrc" \
+    --recursive \
+    --drop \
+    --command "$cmd"
+
+
+

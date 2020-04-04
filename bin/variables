@@ -1,0 +1,13 @@
+#!/bin/bash
+
+PROJECT_SCRIPT_DIR="$(cd "$(dirname "$0}")" >/dev/null 2>&1 && pwd)"
+PROJECT_ROOT_DIR="$(dirname "$PROJECT_SCRIPT_DIR")"
+
+SOURCE_CODE="
+$PROJECT_ROOT_DIR/src/silly-walking-api-v1/silly_walking
+$PROJECT_ROOT_DIR/src/silly-walking-client/silly_walking
+"
+
+LINT_TARGETS="$SOURCE_CODE"
+
+ISORT_TARGETS="$SOURCE_CODE"
