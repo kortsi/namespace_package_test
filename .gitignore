@@ -11,6 +11,5 @@
 **/coverage.xml
 **/coverage_html
 *.log
-
-
-
+*.egg-info
+/src/*/dist
