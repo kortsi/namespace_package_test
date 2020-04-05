@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='silly-walking-api-v1',
-      version='0.0.1',
+      version='0.0.2',
       description='Silly Walking API v1',
       long_description=
       'This is just to test native namespace packages (API part)',

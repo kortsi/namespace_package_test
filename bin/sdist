@@ -1,0 +1,79 @@
+#!/bin/bash
+
+PATH="$(cd "$(dirname "$0")" >/dev/null 2>&1 && pwd)":$PATH
+
+source variables
+
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+BLUE='\033[1;34m'
+PLAIN='\033[0m'
+
+pushd "$PROJECT_DIR" >/dev/null
+
+echo
+printf "${BLUE}"
+echo '#########################################'
+echo '#       src/silly-walking-api-v1        #'
+echo '#########################################'
+printf "${PLAIN}"
+echo
+
+cd src/silly-walking-api-v1
+python setup.py sdist
+APIV1_RETVAL="$?"
+cd ../..
+
+echo
+printf "${BLUE}"
+echo '#########################################'
+echo '#       src/silly-walking-client        #'
+echo '#########################################'
+printf "${PLAIN}"
+echo
+
+cd src/silly-walking-client
+python setup.py sdist
+CLIENT_RETVAL="$?"
+cd ../..
+
+echo
+
+if [ ! "$APIV1_RETVAL$CLIENT_RETVAL" = "00" ]; then
+
+
+    printf "${RED}"
+    echo '################################################################'
+    echo '#                       BUILD SUMMARY                          #'
+    echo '#                                                              #'
+
+    if [ ! "$APIV1_RETVAL" = "0" ]; then
+        echo '# ! src/silly-walking-api-v1 reported problems                 #'
+    fi
+
+    if [ ! "$CLIENT_RETVAL" = "0" ]; then
+        echo '# ! src/silly-walking-client reported problems                 #'
+    fi
+
+    echo '#                                                              #'
+    echo '#              Problems were found. Please fix.                #'
+    echo '################################################################'
+    echo
+    find src -type f|grep dist
+    printf "${PLAIN}"
+    popd >/dev/null
+    exit 1
+fi
+
+printf "${GREEN}"
+echo '################################################################'
+echo '#                       BUILD SUMMARY                          #'
+echo '#                                                              #'
+echo '#                                                              #'
+echo '#                         All good!                            #'
+echo '################################################################'
+echo
+find src -type f|grep dist
+printf "${PLAIN}"
+
+popd >/dev/null

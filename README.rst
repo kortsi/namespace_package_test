@@ -35,6 +35,13 @@ packages into your PYTHONPATH:
 
 |
 
+To build, simply run:
+
+::
+
+    sdist
+
+|
 
 Mypy issue
 ----------
